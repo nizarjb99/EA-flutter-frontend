@@ -86,4 +86,30 @@ class OrganizationService {
       throw Exception('No se pudo crear la tarea. Error: $e');
     }
   }
+
+  Future<void> updateTaskEstado({
+    required String organizacionId,
+    required String tareaId,
+    required String estado,
+  }) async {
+    try {
+      final response = await http.put(
+        Uri.parse('${AppConstants.baseUrl}/organizaciones/$organizacionId/tareas/$tareaId/estado'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(<String, dynamic>{
+          'estado': estado,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return;
+      }
+
+      throw Exception('Error al actualizar estado: ${response.statusCode} - ${response.body}');
+    } catch (e) {
+      throw Exception('No se pudo actualizar el estado. Error: $e');
+    }
+  }
 }

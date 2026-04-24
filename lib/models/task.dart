@@ -5,6 +5,7 @@ class Task {
   final String titulo;
   final DateTime fechaInicio;
   final DateTime fechaFin;
+  final String estado; // 'todo', 'in_progress', 'done'
   final List<OrganizationUser> usuarios;
 
   Task({
@@ -12,6 +13,7 @@ class Task {
     required this.titulo,
     required this.fechaInicio,
     required this.fechaFin,
+    required this.estado,
     required this.usuarios,
   });
 
@@ -19,12 +21,14 @@ class Task {
     final String id = (json['_id'] ?? json['id'] ?? '').toString();
     final String titulo =
         (json['titulo'] ?? json['title'] ?? 'Sin título').toString();
+    final String estado = (json['estado'] ?? 'todo').toString();
 
     return Task(
       id: id,
       titulo: titulo,
       fechaInicio: _parseDate(json['fechaInicio'] ?? json['fecha_inicio']),
       fechaFin: _parseDate(json['fechaFin'] ?? json['fecha_fin']),
+      estado: estado,
       usuarios: (json['usuarios'] as List<dynamic>?)
               ?.map((dynamic u) => OrganizationUser.fromJson(u))
               .toList() ??
@@ -41,4 +45,4 @@ class Task {
     }
     throw FormatException('Fecha inválida en Task: $value');
   }
-}
+}

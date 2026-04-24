@@ -13,8 +13,30 @@ class TaskDetailScreen extends StatelessWidget {
     return '$day/$month/$year';
   }
 
+  static const Map<String, String> _estadoLabels = {
+    'todo': 'To Do',
+    'in_progress': 'In Progress',
+    'done': 'Done',
+  };
+
+  static const Map<String, Color> _estadoColors = {
+    'todo': Color(0xFF6C7CE7),
+    'in_progress': Color(0xFFF5A623),
+    'done': Color(0xFF4CAF50),
+  };
+
+  static const Map<String, IconData> _estadoIcons = {
+    'todo': Icons.radio_button_unchecked,
+    'in_progress': Icons.timelapse,
+    'done': Icons.check_circle,
+  };
+
   @override
   Widget build(BuildContext context) {
+    final estadoLabel = _estadoLabels[task.estado] ?? task.estado;
+    final estadoColor = _estadoColors[task.estado] ?? Colors.grey;
+    final estadoIcon = _estadoIcons[task.estado] ?? Icons.help;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
@@ -47,16 +69,41 @@ class TaskDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
-                      Icon(Icons.assignment, color: Colors.blueAccent),
-                      SizedBox(width: 8),
-                      Text(
+                      const Icon(Icons.assignment, color: Colors.blueAccent),
+                      const SizedBox(width: 8),
+                      const Text(
                         'Tarea',
                         style: TextStyle(
                           color: Colors.blueAccent,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1.2,
+                        ),
+                      ),
+                      const Spacer(),
+                      // Estado badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: estadoColor.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: estadoColor.withOpacity(0.3)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(estadoIcon, size: 16, color: estadoColor),
+                            const SizedBox(width: 6),
+                            Text(
+                              estadoLabel,
+                              style: TextStyle(
+                                color: estadoColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
